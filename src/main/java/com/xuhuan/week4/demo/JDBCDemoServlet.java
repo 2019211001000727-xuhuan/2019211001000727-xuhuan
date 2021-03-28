@@ -1,9 +1,8 @@
 package com.xuhuan.week4.demo;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebInitParam;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,13 +22,10 @@ public class JDBCDemoServlet extends HttpServlet {
     Connection con=null;
     @Override
     public void init() throws ServletException {
-        //only one connection
         //String driver="com.microsoft.sqlserver.jdbc.SQLServerDriver";
         //String url="jdbc:sqlserver://localhost;databaseName=userdb;";
         //String username="sa";
         //String password="123456";
-        //code like this is bad way --- because change in no easy
-        //for example change password of db - change in java code
 
         ServletConfig config=getServletConfig();
         String driver=config.getInitParameter("driver");
@@ -49,14 +45,14 @@ public class JDBCDemoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("i am in doGet()");
-        String sql="select * from Usertable";
+        String sql="select * from usertable";
         try {
             ResultSet rs=con.createStatement().executeQuery(sql);
             while(rs.next()){
 
             }
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 
@@ -70,8 +66,8 @@ public class JDBCDemoServlet extends HttpServlet {
         super.destroy();
         try {
             con.close();
-        } catch (SQLException throwable) {
-            throwable.printStackTrace();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }
