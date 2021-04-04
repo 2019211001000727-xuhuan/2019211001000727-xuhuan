@@ -1,7 +1,6 @@
 package com.xuhuan.week3.demo;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.IOException;
