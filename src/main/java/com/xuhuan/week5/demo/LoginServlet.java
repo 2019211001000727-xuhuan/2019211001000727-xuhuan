@@ -33,19 +33,19 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String Username=request.getParameter("Username");
+        String username=request.getParameter("username");
         String password=request.getParameter("password");
         String sql="select * from usertable where username=? and password=?";
         PreparedStatement pstmt= null;
         try {
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1,Username);
+            pstmt.setString(1,username);
             pstmt.setString(2,password);
             ResultSet rs= pstmt.executeQuery();
             PrintWriter out=response.getWriter();
             if(rs.next()){
                 out.println("Login Success!!!");
-                out.println("Welcome,"+Username);
+                out.println("Welcome,"+username);
             }else out.println("Login Error!!!");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
