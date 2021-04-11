@@ -61,22 +61,22 @@ public class RegisterServlet extends HttpServlet {
             pstmt.setString(4,Gender);
             pstmt.setString(5,Date);
             pstmt.executeUpdate();
-            response.sendRedirect("login.jsp");
+            //response.sendRedirect("login.jsp");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        response.setContentType("text/html");
+        /*response.setContentType("text/html");
         PrintWriter out=response.getWriter();
         out.println("<html>");
         out.println("<head><title>Register</title></head>");
         out.println("<body>");
         out.println("<table>");
-        out.println("<tr><td>ID</td><td>username</td><td>password</td><td>Email</td><td>Gender</td><td>Birthdate</td></tr>");
+        out.println("<tr><td>ID</td><td>username</td><td>password</td><td>Email</td><td>Gender</td><td>Birthdate</td></tr>");*/
         String sql2="select * from usertable";
         ResultSet rs= null;
         try {
             rs = con.createStatement().executeQuery(sql2);
-            while(rs.next()){
+            /*while(rs.next()){
                 int id=rs.getInt("id");
                 String username=rs.getString("username");
                 String password1=rs.getString("password");
@@ -85,7 +85,7 @@ public class RegisterServlet extends HttpServlet {
                 Date birthdate=rs.getDate("birthdate");
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                 out.println("<tr><td>"+id+"</td><td>"+username+"</td><td>"+password1+"</td><td>"+email+"</td><td>"+gender+"</td><td>"+sdf.format(birthdate)+"</td></tr>");
-            }
+            }*/
             request.setAttribute("rsname",rs);
             request.getRequestDispatcher("userList.jsp").forward(request,response);
             System.out.println("i am in RegisterServlet-->doPost()-->after forward()");
