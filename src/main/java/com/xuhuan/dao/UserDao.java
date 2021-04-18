@@ -42,7 +42,7 @@ public class UserDao implements IUserDao{
         if(rs.next()){
             user=new User();
             user.setId(rs.getInt("id"));
-            user.setUsernamne(rs.getString("username"));
+            user.setUsername(rs.getString("username"));
             user.setPassword(rs.getString("password"));
             user.setEmail(rs.getString("email"));
             user.setGender(rs.getString("gender"));
