@@ -17,7 +17,7 @@
     password:<input type="password" name="password" value="<%=u.getPassword()%>"><br/>
     Email:<input type="text" name="Email" value="<%=u.getEmail()%>"><br/>
     Gender:<input type="radio" name="Gender" value="Male" <%="Male".equals(u.getGender())?"checked":""%>/> Male
-           <input type="radio" name="Gender" value="Female" <%="Female".equals(u.getGender())?"checked":""%>/> Female
+           <input type="radio" name="Gender" value="Female" <%="Female".equals(u.getGender())?"checked":""%>/> Female<br/>
     Date of Birth:<input type="date" name="Date" value="<%=u.getBirthdate()%>"><br/>
     <input type="submit" value="Save Changes"/>
 </form>

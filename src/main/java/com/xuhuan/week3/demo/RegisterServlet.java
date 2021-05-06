@@ -33,7 +33,7 @@ public class RegisterServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doPost(request,response);
+        request.getRequestDispatcher("WEB-INF/views/register.jsp").forward(request,response);
     }
 
     @Override
@@ -86,9 +86,10 @@ public class RegisterServlet extends HttpServlet {
                 SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                 out.println("<tr><td>"+id+"</td><td>"+username+"</td><td>"+password1+"</td><td>"+email+"</td><td>"+gender+"</td><td>"+sdf.format(birthdate)+"</td></tr>");
             }*/
-            request.setAttribute("rsname",rs);
-            request.getRequestDispatcher("userList.jsp").forward(request,response);
+            //request.setAttribute("rsname",rs);
+           // request.getRequestDispatcher("userList.jsp").forward(request,response);
             System.out.println("i am in RegisterServlet-->doPost()-->after forward()");
+            response.sendRedirect("login");
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
