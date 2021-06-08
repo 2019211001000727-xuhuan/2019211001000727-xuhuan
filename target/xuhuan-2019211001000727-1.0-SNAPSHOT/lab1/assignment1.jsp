@@ -22,13 +22,13 @@
         <li>${i}</li>
         </c:forEach>
     </ul>
-<h2>use c:forEach to print 1,3,5,7,9</h2>
+<h1>use c:forEach to print 1,3,5,7,9</h1>
     <ul>
         <c:forEach var="i" begin="1" end="10" step="2">
         <li>${i}</li>
         </c:forEach>
     </ul>
-<h3>use c:forEach to print 2,4,6,8,10</h3>
+<h1>use c:forEach to print 2,4,6,8,10</h1>
     <ul>
         <c:forEach var="i" begin="2" end="10" step="2">
             <li>${i}</li>
@@ -40,13 +40,13 @@
 <% String[] words ={"one","two","three","four","five","six","seven","eight","nine","ten"};
    pageContext.setAttribute("words", words);
 %>
-<h4>use c:forEach to print all elements of array</h4>
+<h1>use c:forEach to print all elements of array</h1>
     <ul>
         <c:forEach var="word" items="${words}">
             <li>${word}</li>
         </c:forEach>
     </ul>
-<h5>use c:forEach to print "one","three","five","seven","nine" of array</h5>
+<h1>use c:forEach to print "one","three","five","seven","nine" of array</h1>
     <ul>
         <c:forEach var="word" items="${words}" step="2">
             <li>${word}</li>
@@ -63,7 +63,7 @@ personList.add(new Person("Xgt",new Dog("Xgtmy")));
 personList.add(new Person("Qnh",new Dog("Qnhmy")));
     request.setAttribute("AllPerson",personList);
 %>
-<h6>use c:forEach to print Person name: and Person's dos name: </h6>
+<h1>use c:forEach to print Person name: and Person's dos name: </h1>
     <ul>
         <c:forEach var="a" items="${AllPerson}">
             <li>Person name: ${a.name}，Dog name: ${a.dog.name}</li>
@@ -72,7 +72,7 @@ personList.add(new Person("Qnh",new Dog("Qnhmy")));
 <%
     String str="one:two:three-four-five";
 %>
-<h7>use c:forTokens to print all words</h7>
+<h1>use c:forTokens to print all words</h1>
     <c:forTokens items="<%=str%>" delims="," var="Allwords">
         <li><c:out value="${Allwords}"/></li>
     </c:forTokens>
