@@ -11,7 +11,6 @@ import java.util.Set;
 
 
 
-
 /**
  * AbstractPayment entity provides the base persistence definition of the
  * Payment entity. @author MyEclipse Persistence Tools
@@ -72,12 +71,12 @@ public  class Payment implements java.io.Serializable {
 	public static List<Payment> findAllPayment(Connection con){
 		List<Payment> list=new ArrayList<Payment>();
 		try {
-			String queryString = "select * from  Payment";
+			String queryString = "select * from Payment";
 			PreparedStatement	statement = con.prepareStatement(queryString);
 			ResultSet resultSet = statement.executeQuery();
 			while(resultSet.next()){
 				Payment c = new Payment();
-				c.setPaymentId(resultSet.getInt("paymentId"));
+				c.setPaymentId(resultSet.getInt("PaymentId"));
 				c.setPaymentType(resultSet.getString("PaymentType"));
 				c.setAllowed(resultSet.getInt("allowed")==1?true:false);
 				list.add(c);
