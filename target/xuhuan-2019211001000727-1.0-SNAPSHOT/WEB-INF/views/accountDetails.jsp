@@ -60,7 +60,7 @@
 					</c:when>
 					<c:otherwise>
 					<!-- loop_start -->
-					<c:forEach var="o" items="${oederList}">
+					<c:forEach var="o" items="${orderList}">
 						<tr>
 						<td>OID:${o.orderId}</td>
 						<td>${o.orderDate}</td>

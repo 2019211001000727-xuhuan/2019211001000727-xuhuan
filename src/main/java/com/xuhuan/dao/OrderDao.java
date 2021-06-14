@@ -13,11 +13,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-
 import com.xuhuan.model.Item;
 import com.xuhuan.model.Order;
-
 import com.xuhuan.model.Product;
 
 /**
@@ -27,19 +24,19 @@ import com.xuhuan.model.Product;
  * augmented to handle user-managed Spring transactions. Each of these methods
  * provides additional information for how to configure it for the desired type
  * of transaction control.
- * 
+ *
  * @author dabing
  */
 public class OrderDao implements IOrderDao {
 
-	@Override 
+	@Override
 	public int save(Connection con,Order order) throws SQLException {
 		int flag=0;
 		try {
 			//By default,committed right after it is executed,disable the auto commit mode to enable two or more statements to be grouped into a transaction// begin the transaction:
 			con.setAutoCommit(false);
 			//sql =INSERT INTO userdb.order for mysql
-			String sql="INSERT INTO [dbo].[order](CustomerID,PaymentID,OrderDate,FirstName,LastName,Address1,Address2,city,state,PostalCode,Country,Phone,Notes,OrderTotal) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql="INSERT INTO [dbo].[order](CutomerId,PaymentId,OrderDate,FirstName,LastName,Address1,Address2,city,State,PostalCode,Country,Phone,Notes,OrderTotal) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement st = con.prepareStatement(sql);
 			st.setInt(1, order.getCustomerId());
 			st.setInt(2, order.getPaymentId());
@@ -58,29 +55,30 @@ public class OrderDao implements IOrderDao {
 			st.setString(13, order.getNotes());
 			st.setDouble(14, order.getOrderTotal());
 			flag = st.executeUpdate();
-			
+
 			//get newly inserted OrderId
-				String lastId="SELECT max(orderid) as orderId from [dbo].[order] ";//"SELECT max(orderid) as orderId from userdb.order"; for mysql
-				ResultSet rs=con.createStatement().executeQuery(lastId);
-				rs.next();
-				int orderId=rs.getInt("orderId");
-				//set all orderDetails
-				Set<Item> orderDetails =order.getOrderDetails();
-				//OrderDetailsDao odDao=new OrderDetailsDao();
-				Iterator<Item> i=orderDetails.iterator();
-				String sql1="INSERT INTO orderdetail(OrderID,ProductID,price,Quantity,Total) values(?,?,?,?,?)";
-				PreparedStatement st1 = con.prepareStatement(sql1);
-				while(i.hasNext()){
-					Item item= i.next();
-					st1.setInt(1, orderId);
-					st1.setInt(2, item.getProduct().getProductId());
-					st1.setDouble(3, item.getProduct().getPrice());
-					st1.setInt(4, item.getQuantity());
-					st1.setDouble(5, item.getQuantity()*item.getProduct().getPrice());
-					 flag = st1.executeUpdate();
-				}
-			 con.commit();	//commit the transaction-all SQL statements committed as a single unit
-			} catch (Exception re) {
+			String lastId="SELECT max(OrderId) as OrderId from [dbo].[Order] ";//"SELECT max(orderid) as orderId from userdb.order"; for mysql
+			ResultSet rs=con.createStatement().executeQuery(lastId);
+			rs.next();
+			int orderId=rs.getInt("OrderId");
+			//set all orderDetails
+			Set<Item> orderDetails =order.getOrderDetails();
+			//OrderDetailsDao odDao=new OrderDetailsDao();
+			Iterator<Item> i=orderDetails.iterator();
+			String sql1="INSERT INTO OrderDetail(OrderId,ProductId,Price,Quantity,Total) values(?,?,?,?,?)";
+			PreparedStatement st1 = con.prepareStatement(sql1);
+			int sum=0;
+			while(i.hasNext()){
+				Item item= i.next();
+				st1.setInt(1, orderId);
+				st1.setInt(2, item.getProduct().getProductId());
+				st1.setDouble(3, item.getProduct().getPrice());
+				st1.setInt(4, item.getQuantity());
+				st1.setDouble(5, item.getQuantity()*item.getProduct().getPrice());
+				flag = st1.executeUpdate();
+			}
+			con.commit();	//commit the transaction-all SQL statements committed as a single unit
+		} catch (Exception re) {
 			try {
 				con.rollback();//If any statement failed to execute,abort the transaction:
 				throw re;
@@ -92,20 +90,20 @@ public class OrderDao implements IOrderDao {
 		}
 		return flag;
 	}//end save
-	@Override 
+	@Override
 	public int delete(Connection con,Order order) {
 		return 0;
 	}
-	@Override 
+	@Override
 	public int update(Connection con,Order order) {
-			return 0;
+		return 0;
 	}
-	@Override 
+	@Override
 	public Order findById(Connection con,int id) {
 
 		return findByProperty(con,"orderId", id).get(0);
 	}
-	@Override 
+	@Override
 	public List<Order> findByProperty(Connection con,String propertyName, Object value) {
 		System.out.println("finding Order instance with property: " + propertyName
 				+ ", value: " + value);
@@ -117,9 +115,9 @@ public class OrderDao implements IOrderDao {
 			ResultSet	rs = st.executeQuery();
 			while(rs.next()){
 				Order o=new Order();
-				o.setOrderId(rs.getInt("OrderID"));
-				o.setCustomerId(rs.getInt("CustomerID"));
-				o.setPaymentId(rs.getInt("PaymentID"));
+				o.setOrderId(rs.getInt("OrderId"));
+				o.setCustomerId(rs.getInt("CustomerId"));
+				o.setPaymentId(rs.getInt("PaymentId"));
 				o.setOrderDate(rs.getTimestamp("OrderDate"));
 				o.setFirstName(rs.getString("FirstName"));
 				o.setLastName(rs.getString("LastName"));
@@ -132,7 +130,7 @@ public class OrderDao implements IOrderDao {
 				o.setPhone(rs.getString("Phone"));
 				o.setNotes(rs.getString("Notes"));
 				o.setOrderTotal(rs.getDouble("OrderTotal"));
-				
+
 				orderList.add(o);
 			}
 		} catch (RuntimeException | SQLException re) {
@@ -144,56 +142,56 @@ public class OrderDao implements IOrderDao {
 		}
 		return orderList;
 	}
-	@Override 
+	@Override
 	public List<Order> findByUserId(Connection con,Object CustomerID) {
-		return findByProperty(con,"CustomerID", CustomerID);
+		return findByProperty(con,"CustomerId", CustomerID);
 	}
 
-	@Override 
+	@Override
 	public List<Order> findByFirstName(Connection con,Object firstName) {
 		return findByProperty(con,"firstName", firstName);
 	}
-	@Override 
+	@Override
 	public List<Order> findByLastName(Connection con,Object lastName) {
 		return findByProperty(con,"LastName", lastName);
 	}
-	@Override 
+	@Override
 	public List<Order> findByAddress1(Connection con,Object address1) {
 		return findByProperty(con,"ADDRESS1", address1);
 	}
-	@Override 
+	@Override
 	public List<Order> findByAddress2(Connection con,Object address2) {
 		return findByProperty(con,"ADDRESS2", address2);
 	}
-	@Override 
+	@Override
 	public List<Order> findByCity(Connection con,Object city) {
 		return findByProperty(con,"CITY", city);
 	}
-	@Override 
+	@Override
 	public List<Order> findByState(Connection con,Object state) {
 		return findByProperty(con,"STATE", state);
 	}
-	@Override 
+	@Override
 	public List<Order> findByPostalCode(Connection con,Object postalCode) {
 		return findByProperty(con,"POSTAL_CODE", postalCode);
 	}
-	@Override 
+	@Override
 	public List<Order> findByCountry(Connection con,Object country) {
 		return findByProperty(con,"COUNTRY", country);
 	}
-	@Override 
+	@Override
 	public List<Order> findByPhone(Connection con,Object phone) {
 		return findByProperty(con,"PHONE", phone);
 	}
-	@Override 
+	@Override
 	public List<Order> findByNotes(Connection con,Object notes) {
 		return findByProperty(con,"NOTES", notes);
 	}
-	@Override 
+	@Override
 	public List<Order> findByOrderTotal(Connection con,Object orderTotal) {
 		return findByProperty(con,"ORDER_TOTAL", orderTotal);
 	}
-	@Override 
+	@Override
 	public List<Order> findAll(Connection con) {
 
 		List<Order> orderList=new ArrayList<Order>();
@@ -204,9 +202,9 @@ public class OrderDao implements IOrderDao {
 			ResultSet	rs = st.executeQuery();
 			while(rs.next()){
 				Order o=new Order();
-				o.setOrderId(rs.getInt("OrderID"));
-				o.setCustomerId(rs.getInt("CustomerID"));
-				o.setPaymentId(rs.getInt("PaymentID"));
+				o.setOrderId(rs.getInt("OrderId"));
+				o.setCustomerId(rs.getInt("CustomerId"));
+				o.setPaymentId(rs.getInt("PaymentId"));
 				o.setOrderDate(rs.getTimestamp("OrderDate"));
 				o.setFirstName(rs.getString("FirstName"));
 				o.setLastName(rs.getString("LastName"));
@@ -219,7 +217,7 @@ public class OrderDao implements IOrderDao {
 				o.setPhone(rs.getString("Phone"));
 				o.setNotes(rs.getString("Notes"));
 				o.setOrderTotal(rs.getDouble("OrderTotal"));
-				
+
 				orderList.add(o);
 			}
 		} catch (RuntimeException | SQLException re) {
@@ -231,12 +229,12 @@ public class OrderDao implements IOrderDao {
 		}
 		return orderList;
 	}
-	
-@Override
+
+	@Override
 	public List<Item> findItemsByOrderId(Connection con,int orderId) {
 		List<Item> itemList=new ArrayList<Item>();
 		try {
-			String sql="SELECT 	* FROM orderdetail AS o INNER JOIN product AS p ON o.ProductId=p.ProductId WHERE o.OrderID="+orderId;
+			String sql="SELECT 	* FROM orderdetail AS o INNER JOIN product AS p ON o.ProductId=p.ProductId WHERE o.OrderId="+orderId;
 			ResultSet rs=con.createStatement().executeQuery(sql);
 			while(rs.next()){
 				Item i=new Item();
